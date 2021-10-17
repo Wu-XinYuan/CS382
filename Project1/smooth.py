@@ -34,9 +34,6 @@ def perplexity(n, test_data, model):
     global use_n1
     use_n1 = 0
     test_ngrams = [substitute(ngram, model, n) for ngram in test_ngrams]  # 把不在模型中的词组置为'<UNK>'
-    # print('use n-1 grams:', use_n1)
-    # test_ngrams = [ngram if ngram in model else 'UNK' for ngram in test_ngrams]
-    # test_ngrams = list(test_ngrams)
     probabilities = [model[ngram] for ngram in test_ngrams]
     N = len(probabilities)
     return math.exp((-1 / N) * sum(map(math.log, probabilities)))
@@ -159,7 +156,7 @@ def smooth(data, ngram, n, freq, choice, param):
     Returns:
 
     """
-    print('smoothing model ...')
+    print('running on test...')
     if choice == 1:
         return additive_smoothing(data, n, freq, param)
     if choice == 2:

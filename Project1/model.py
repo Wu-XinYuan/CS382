@@ -1,10 +1,8 @@
-import argparse
-from itertools import product
 import nltk
 import nltk.lm
-from pathlib import Path
 import os
 from smooth import smooth, find_best_smooth, perplexity
+import optparse
 
 
 def load_data(data_dir, file_name, nn):
@@ -26,13 +24,19 @@ def load_data(data_dir, file_name, nn):
         data.insert(0, '<s>')
         data.append('</s>')
     frequency = nltk.FreqDist(data)
-    return [word if frequency[word] >= 3 else '<UNK>' for word in data]
+    return [word if frequency[word] >= 5 else '<UNK>' for word in data]
 
 
 if __name__ == '__main__':
     # Load and prepare data
+    parser = optparse.OptionParser()
+    parser.add_option('-n', dest='n', type=int)
+    (opt, args) = parser.parse_args()
     data_path = r'dataset'
-    n = 3
+    if opt.n:
+        n = opt.n
+    else:
+        n = 3
     trainData = load_data(data_path, 'train_set.txt', n)
     devData = load_data(data_path, 'dev_set.txt', n)
     testData = load_data(data_path, 'test_set.txt', n)
